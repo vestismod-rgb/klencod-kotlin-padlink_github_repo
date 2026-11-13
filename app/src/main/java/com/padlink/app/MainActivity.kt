@@ -8,18 +8,18 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
-import java.util.concurrent.Executors
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy
+import java.util.concurrent.TimeUnit
 
+/** Sends webMAN MOD web commands (/pad.ps3?...) to the PS3 over HTTP port 80. */
 class MainActivity : Activity() {
-    companion object { const val PORT = 8080 }
-
     private lateinit var web: WebView
-    private val exec = Executors.newSingleThreadExecutor()
-    @Volatile private var sock: DatagramSocket? = null
-    @Volatile private var addr: InetAddress? = null
+    private val exec = ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(3), DiscardOldestPolicy()) // in order, drops stale presses
+    @Volatile private var base: String? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(b: Bundle?) {
@@ -40,35 +40,37 @@ class MainActivity : Activity() {
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
     }
 
+    private fun get(url: String, timeoutMs: Int): Int {
+        val c = URL(url).openConnection() as HttpURLConnection
+        return try {
+            c.connectTimeout = timeoutMs; c.readTimeout = timeoutMs; c.requestMethod = "GET"
+            c.responseCode
+        } finally { c.disconnect() }
+    }
+
     inner class Bridge {
         private val prefs = getSharedPreferences("padlink", Context.MODE_PRIVATE)
 
-        @JavascriptInterface fun savedIp(): String = prefs.getString("ip", "") ?: ""
+        @JavascriptInterface fun savedIp(): String = prefs.getString("ip", "192.168.1.103") ?: "192.168.1.103"
 
-        /** Sends HELLO and waits for OK from the PS3 plugin, then calls window.onLink(true/false). */
+        /** Shows a popup on the PS3 screen; calls window.onLink(true/false). */
         @JavascriptInterface fun connect(ip: String) {
             prefs.edit().putString("ip", ip).apply()
             exec.execute {
                 var ok = false
                 try {
-                    sock?.close(); sock = null
-                    val s = DatagramSocket(); s.soTimeout = 1500
-                    val a = InetAddress.getByName(ip)
-                    val hello = "HELLO".toByteArray()
-                    s.send(DatagramPacket(hello, hello.size, a, PORT))
-                    val r = DatagramPacket(ByteArray(16), 16); s.receive(r)
-                    ok = String(r.data, 0, r.length).startsWith("OK")
-                    if (ok) { s.soTimeout = 0; sock = s; addr = a } else s.close()
+                    val u = "http://$ip"
+                    ok = get("$u/popup.ps3/PAD%20LINK%20connected", 2500) in 200..399
+                    if (ok) base = u
                 } catch (e: Exception) { ok = false }
                 runOnUiThread { web.evaluateJavascript("window.onLink($ok)", null) }
             }
         }
 
-        /** Messages: "E,<code>,<1|0>" press/release   "S,<L3|R3>,<x>,<y>" stick -120..120 */
-        @JavascriptInterface fun send(msg: String) {
-            exec.execute {
-                try { val d = msg.toByteArray(); sock?.send(DatagramPacket(d, d.size, addr, PORT)) } catch (e: Exception) {}
-            }
+        /** path example: /pad.ps3?cross_hold   (executed in order) */
+        @JavascriptInterface fun send(path: String) {
+            val b = base ?: return
+            exec.execute { try { get(b + path, 1500) } catch (e: Exception) { } }
         }
     }
 }

@@ -3,43 +3,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAD LINK Controller</title>
 <style>
-:root{--k:#1b2650;--ln:#5b8cff;--tx:#fff;--mut:#9db7ff;--ac:#3b82f6;--hw:#ffb020;color-scheme:dark;box-sizing:border-box;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k:#1b2650;--tx:#fff}}
-:root[data-theme="dark"]{--k:#1b2650;--tx:#fff}
+:root{--k:#2b2108;--ln:#ffb300;--tx:#fff;--mut:#ffd27a;--ac:#ffb300;--hw:#4dd0e1;color-scheme:dark;box-sizing:border-box;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k:#2b2108;--tx:#fff}}
+:root[data-theme="dark"]{--k:#2b2108;--tx:#fff}
 html,body{height:100%;margin:0}
-body{background:linear-gradient(135deg,#0b2a7a,#030a22);color:var(--tx);font:700 14px Arial,Helvetica,sans-serif;display:flex;user-select:none;-webkit-user-select:none;touch-action:none;overflow:hidden}
-#hb{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 6px);left:calc(env(safe-area-inset-left,0px) + 6px);width:38px;height:38px;border-radius:12px;background:rgba(27,38,80,.75);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
-#rail{position:fixed;z-index:19;top:calc(env(safe-area-inset-top,0px) + 50px);left:calc(env(safe-area-inset-left,0px) + 6px);display:none;flex-direction:column;gap:6px;padding:8px;border-radius:18px;background:rgba(7,18,50,.95);border:1px solid var(--ln)}
+body{background:linear-gradient(135deg,#2a1a00,#0b0700);color:var(--tx);font:700 14px Arial,Helvetica,sans-serif;display:flex;user-select:none;-webkit-user-select:none;touch-action:none;overflow:hidden}
+#hb{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 6px);left:calc(env(safe-area-inset-left,0px) + 6px);width:38px;height:38px;border-radius:12px;background:rgba(43,33,8,.8);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+#rail{position:fixed;z-index:19;top:calc(env(safe-area-inset-top,0px) + 50px);left:calc(env(safe-area-inset-left,0px) + 6px);display:none;flex-direction:column;gap:6px;padding:8px;border-radius:18px;background:rgba(20,13,0,.96);border:1px solid var(--ln)}
 #rail.open{display:flex}
 .m{width:130px;height:46px;border-radius:14px;background:var(--k);border:1px solid var(--ln);display:flex;align-items:center;gap:10px;padding:0 12px;box-sizing:border-box;font-size:14px;color:var(--mut)}
-.m span{font-size:20px}.m.a{background:var(--ac);color:#fff;border-color:#fff}
+.m span{font-size:20px}.m.a{background:var(--ac);color:#1a1200;border-color:#fff}
 #main{flex:1;min-width:0;position:relative;display:flex;align-items:center;justify-content:center;padding:8px}
 #st{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--mut);white-space:nowrap}
 #pad{max-width:100%;max-height:100%}
 #pad text{fill:#fff;font-weight:700;text-anchor:middle;pointer-events:none;font-family:Arial,sans-serif}
 .sh{fill:var(--k);stroke:var(--ln);stroke-width:3;transform-box:fill-box;transform-origin:center}
-.ring{fill:#0a1233;stroke:var(--ln);stroke-width:3}
+.ring{fill:#140d00;stroke:var(--ln);stroke-width:3}
 .cap{fill:var(--mut)!important;font-size:15px}
 .b.on .sh,.b.on .ring+.kn .sh{fill:var(--c,var(--ac));animation:pl .45s ease-in-out infinite alternate}
 .b.phys .sh{fill:var(--hw)!important;stroke:var(--hw)}
+#pad .b.phys text{fill:#001417}#pad .b.on:not(.phys) text{fill:#1a1200}#pad .b[style] .sh+text,#pad .b[style].on text{fill:#fff}
 @keyframes pl{to{transform:scale(1.13);filter:brightness(1.35)}}
 .key{display:none}#pad.map .key{display:inline}#pad.map .sym{display:none}
 #keys,#mouse{display:none;width:100%;height:100%}
 #keys{flex-direction:column;justify-content:center;gap:6px}
 .r{display:flex;gap:6px}
 .k,.mb{background:var(--k);border:1px solid var(--ln);border-radius:10px;display:flex;align-items:center;justify-content:center;height:clamp(34px,13vh,58px);font-size:clamp(12px,2.6vh,18px)}
-.k.on,.mb.on,#tp.on{background:var(--ac);animation:pl .45s ease-in-out infinite alternate}
+.k.on,.mb.on,#tp.on{color:#1a1200;background:var(--ac);animation:pl .45s ease-in-out infinite alternate}
 .k.phys,.mb.phys{background:var(--hw);color:#000}
 #mouse{gap:8px;padding-top:18px}
 #tp{flex:1;border-radius:22px;background:rgba(255,255,255,.06);border:2px dashed var(--ln);position:relative;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:14px}
 #dot{position:absolute;width:26px;height:26px;margin:-13px;border-radius:50%;background:var(--hw);box-shadow:0 0 18px var(--hw);display:none;pointer-events:none}
 #mb{width:26%;display:flex;flex-direction:column;gap:8px}#mb .mb{flex:1;height:auto}
-#cn{position:fixed;inset:0;z-index:50;background:rgba(3,10,34,.97);display:none;align-items:center;justify-content:center;text-align:center}
-#cn input{width:240px;font-size:22px;padding:10px;border-radius:12px;border:2px solid var(--ln);background:#0a1233;color:#fff;text-align:center;user-select:text;-webkit-user-select:text}
-#go{margin:14px auto 0;width:240px;padding:12px;border-radius:24px;background:var(--ac);font-size:18px}
+#cn{position:fixed;inset:0;z-index:50;background:rgba(11,7,0,.97);display:none;align-items:center;justify-content:center;text-align:center}
+#cn input{width:240px;font-size:22px;padding:10px;border-radius:12px;border:2px solid var(--ln);background:#140d00;color:#fff;text-align:center;user-select:text;-webkit-user-select:text}
+#go{color:#1a1200;margin:14px auto 0;width:240px;padding:12px;border-radius:24px;background:var(--ac);font-size:18px}
 #ms{margin-top:12px;font-size:13px;color:var(--mut);max-width:300px}
 </style></head><body>
-<div id="cn"><div><div style="font-size:20px;margin-bottom:10px">PAD LINK</div><input id="ip" inputmode="decimal" placeholder="PS3 IP  192.168.1.50"><div id="go">CONNECT</div><div id="ms"></div></div></div>
+<div id="cn"><div><div style="font-size:20px;margin-bottom:10px">PAD LINK</div><input id="ip" inputmode="decimal" placeholder="PS3 IP  192.168.1.103"><div id="go">CONNECT</div><div id="ms"></div></div></div>
 <div id="hb">☰</div>
 <div id="rail">
 <div class="m a" data-m="pad"><span>🎮</span>PAD</div>
@@ -56,8 +57,13 @@ body{background:linear-gradient(135deg,#0b2a7a,#030a22);color:var(--tx);font:700
 </div>
 <script>
 var $=function(s){return document.querySelector(s)},codes={},held={},alias={ShiftRight:"ShiftLeft",ControlRight:"ControlLeft",AltRight:"AltLeft",NumpadEnter:"Enter"};
-var LIVE=!!window.PadLink,lastS=0;
-function net(m){if(LIVE)PadLink.send(m)}
+var NATIVE=!!window.PadLink,LIVE=NATIVE||location.protocol!=="https:",lastS=0,BASE="";
+function out(p){if(NATIVE)PadLink.send(p);else fetch(BASE+p,{mode:"no-cors",cache:"no-store"}).catch(function(){})}
+var MAP={KeyQ:"l1",KeyR:"r1",M2:"l2",M0:"r2",ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right",KeyE:"triangle",KeyC:"circle",Space:"cross",KeyF:"square",Tab:"select",Enter:"start",Escape:"psbtn",ShiftLeft:"l3",M1:"r3",KeyW:"analogL_up",KeyS:"analogL_down",KeyA:"analogL_left",KeyD:"analogL_right"},hs={},lastQ="";
+var rep=null;
+function fire(){var a=Object.keys(hs);if(a.length)out("/pad.ps3?"+a.join("_"))}
+function flush(){var a=Object.keys(hs).join("_");if(a==lastQ)return;lastQ=a;clearInterval(rep);rep=null;if(a){fire();rep=setInterval(fire,110)}}
+function net(m){if(!LIVE)return;var p=m.split(",");if(p[0]=="E"){var b=MAP[p[1]];if(!b)return;if(p[2]=="1")hs[b]=1;else delete hs[b]}else{var x=+p[2],y=+p[3],s=p[1]=="L3"?"analogL_":"analogR_";["up","down","left","right"].forEach(function(d){delete hs[s+d]});if(y<-60)hs[s+"up"]=1;if(y>60)hs[s+"down"]=1;if(x<-60)hs[s+"left"]=1;if(x>60)hs[s+"right"]=1}flush()}
 function send(c,d){$("#st").textContent=(LIVE?"● ":"○ demo ")+(d?"▼ ":"▲ ")+c;net("E,"+c+","+d)}
 function sendStick(n,x,y){var t=Date.now();if(t-lastS<40&&(x||y))return;lastS=t;net("S,"+n+","+Math.round(x*4)+","+Math.round(y*4))}
 function reg(el,cs){el.dataset.c=cs.join(" ");cs.forEach(function(c){(codes[c]=codes[c]||[]).push(el)})}
@@ -69,7 +75,7 @@ el.addEventListener("pointerdown",function(e){el.setPointerCapture(e.pointerId);
 var P=[["L2","r",110,26,220,48,"L2","RMB",["M2"]],["L1","r",110,86,220,48,"L1","Q",["KeyQ"]],["R2","r",950,26,220,48,"R2","LMB",["M0"]],["R1","r",950,86,220,48,"R1","R",["KeyR"]],
 ["U","r",200,185,60,55,"▲","↑",["ArrowUp"]],["D","r",200,260,60,55,"▼","↓",["ArrowDown"]],["Lf","r",155,215,55,60,"◀","←",["ArrowLeft"]],["Rt","r",250,215,55,60,"▶","→",["ArrowRight"]],
 ["T","c",1050,245,40,0,"△","E",["KeyE"],"#2ecc71"],["O","c",1120,315,40,0,"○","C",["KeyC"],"#e74c3c"],["X","c",1050,385,40,0,"✕","SPACE",["Space"],"#3b82f6"],["S","c",980,315,40,0,"□","F",["KeyF"],"#e84f9c"],
-["SE","r",500,215,100,42,"SELECT","TAB",["Tab"]],["ST","r",680,215,100,42,"START","ENTER",["Enter"]],["PS","c",640,320,38,0,"PS","ESC",["Escape"],"#3b82f6"]];
+["SE","r",500,215,100,42,"SELECT","TAB",["Tab"]],["ST","r",680,215,100,42,"START","ENTER",["Enter"]],["PS","c",640,320,38,0,"PS","ESC",["Escape"],"#ffb300"]];
 var h="";
 P.forEach(function(p){var id=p[0],r=p[1]=="r",cx=r?p[2]+p[4]/2:p[2],cy=r?p[3]+p[5]/2:p[3],fs=r?20:p[6].length>2?22:30,col=p[9]?' style="--c:'+p[9]+'"':"",sh=r?'<rect class="sh" x="'+p[2]+'" y="'+p[3]+'" width="'+p[4]+'" height="'+p[5]+'" rx="14"/>':'<circle class="sh" cx="'+cx+'" cy="'+cy+'" r="'+p[4]+'"'+(p[9]?' style="stroke:'+p[9]+'"':"")+'/>';
 h+='<g class="b" data-id="'+id+'" data-c="'+p[8].join(" ")+'"'+col+'>'+sh+'<text class="sym" x="'+cx+'" y="'+(cy+fs/3)+'" font-size="'+fs+'">'+p[6]+'</text><text class="key" x="'+cx+'" y="'+(cy+7)+'" font-size="'+(p[7].length>3?16:22)+'">'+p[7]+'</text></g>'});
@@ -101,9 +107,12 @@ var rt,tp=$("#tp"),dot=$("#dot");
 addEventListener("pointermove",function(e){
 if(e.pointerType=="mouse"){var el=pad.querySelector('[data-id="R3"]');mv(el,e.movementX*4,e.movementY*4);el.classList.add("on","phys");clearTimeout(rt);rt=setTimeout(function(){mv(el,0,0);el.classList.remove("on","phys")},140)}
 var r=tp.getBoundingClientRect();if(e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom){dot.style.display="block";dot.style.left=e.clientX-r.left+"px";dot.style.top=e.clientY-r.top+"px"}});
-if(LIVE){$("#cn").style.display="flex";$("#ip").value=PadLink.savedIp()}
-$("#go").addEventListener("click",function(){$("#ms").textContent="Connecting...";PadLink.connect($("#ip").value.trim())});
-window.onLink=function(ok){if(ok)$("#cn").style.display="none";else $("#ms").textContent="No reply from the PS3. Check the IP and that PAD LINK is active."};
+if(LIVE){$("#cn").style.display="flex";var sv="192.168.1.103";try{sv=localStorage.padip||sv}catch(e){}$("#ip").value=NATIVE?PadLink.savedIp():sv}
+$("#go").addEventListener("click",function(){var ip=$("#ip").value.trim();$("#ms").textContent="Connecting...";if(NATIVE){PadLink.connect(ip);return}
+BASE="http://"+ip;try{localStorage.padip=ip}catch(e){}
+var ac=new AbortController(),t=setTimeout(function(){ac.abort()},2500);
+fetch(BASE+"/popup.ps3/PAD%20LINK%20connected",{mode:"no-cors",cache:"no-store",signal:ac.signal}).then(function(){clearTimeout(t);window.onLink(true)}).catch(function(){window.onLink(false)})});
+window.onLink=function(ok){if(ok)$("#cn").style.display="none";else $("#ms").textContent="No reply from the PS3. Check the IP and that webMAN MOD is running."};
 /* mode switch */
 $("#hb").addEventListener("click",function(){$("#rail").classList.toggle("open")});
 addEventListener("pointerdown",function(e){if(!e.target.closest("#rail,#hb"))$("#rail").classList.remove("open")});
